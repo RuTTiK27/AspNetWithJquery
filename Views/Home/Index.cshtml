@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@* <form class="row g-3 needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please provide a valid email.</div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" required>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please provide a valid password.</div>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form> *@
+
+<form class="row g-3 needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="num1" class="form-label">Number 1</label>
+        <input type="number" class="form-control" id="num1" aria-describedby="Number 1" required>
+        <div id="num1Help" class="form-text">Please provide number in integer</div>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please provide a valid number.</div>
+    </div>
+    <div class="mb-3">
+        <label for="num2" class="form-label">Number 2</label>
+        <input type="number" class="form-control" id="num2" required>
+        <div id="num2Help" class="form-text">Please provide number in integer</div>
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please provide a valid number.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@* <a href="~/lib/jquery/dist/jquery.min.map">~/lib/jquery/dist/jquery.min.map</a> *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    // $(document).ready(function(){
+    //     alert("Welcome to jquery")
+    // })
+
+    var isValid = false;
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+              console.log("Form is invalid:", form.checkValidity());
+              isValid = false;
+            }
+
+            if(form.checkValidity()){
+                //alert($("#exampleInputEmail1").val())
+                var n1 = parseInt($("#num1").val());
+                var n2 = parseInt($("#num2").val());
+                $.ajax({
+                    type:'POST',
+                    url:'@Url.Action("calculate")', /* Home/Add */
+                    data:{num1:n1,num2:n2},
+                    dataType:'json', /* dataType:'text', */
+                    success: function(response,status,xhr){
+                        alert("Add: "+response.add
+                        +"\r"+"Subtraction: "+response.susbtract
+                        +"\r"+"Multiplicaion: "+response.multiply
+                        +"\r"+"Divison: "+response.division); 
+                        /* alert("Total: "+response); */
+                        
+                    },
+                    error:function(req,status,error){
+                        alert(error)
+                    }
+                });
+                
+                event.preventDefault()
+                event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+
+
+       
+</script>
